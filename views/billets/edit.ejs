@@ -1,0 +1,123 @@
+<% layout('layout/boilerplate') %>
+
+    <div class="row">
+        <h1 class="text-center">Data Entry - Billets Inwards</h1>
+        <div class="col-6 offset-3">
+
+            <form action="/billets/<%= billet._id%>?_method=PUT" method="POST" id="" enctype="application/x-www-form-urlencoded">
+
+                <label class="form-label" for="heatNumber">Heat No.</label>
+                <input class="form-control" type="text" id="heatNumber" name="billet[heatNo]" value="<%= billet.heatNo %>" required>
+
+                <label class="form-label" for="grade">Grade</label>
+                <input class="form-control" type="text" id="grade" name="billet[gradeName]" value="<%= billet.gradeName %>" required>
+
+                <!-- <label class="form-label" for="unit">Item Quantity Unit</label>
+                                <input class="form-control" type="text" id="unit" name="item[itemUnit]" required> -->
+                <label for="section" class="form-label">Section Size - (MM)</label>
+                <select class="form-select form-select-md" name="billet[sectionSize]" id="section" required>
+                                        <option selected><%= billet.sectionSize%></option>
+                                        <option value="75X75">75x75</option>
+                                        <option value="100X100">100x100</option>
+                                        <option value="130X130">130x130</option>
+                                        <option value="160X160">160x160</option>
+                                        <option value="200X200">200x200</option>
+                                        </select>
+
+
+                <h5 class="mt-2">
+                    Enter Chemical Compositon (e.g. :- 0.18, 0.051)
+                </h5>
+                <label for="carbon" class="form-label">Carbon %</label>
+                <input type="number" step=".01" name="billet[c]" id="carbon" class="form-control" value="<%= billet.c %>" required>
+
+                <label for="manganese" class="form-label">Manganese %</label>
+                <input type="number" step=".001" name="billet[mn]" id="manganese" class="form-control" value="<%= billet.mn %>" required>
+
+                <label for="phos" class="form-label">Phos %</label>
+                <input type="number" step=".001" name="billet[p]" id="phos" class="form-control" value="<%= billet.p %>" required>
+
+                <label for="sulphur" class="form-label">Sulphur %</label>
+                <input type="number" step=".001" name="billet[s]" id="sulphur" class="form-control" value="<%= billet.s %>" required>
+
+                <label for="silicon" class="form-label">Silicon %</label>
+                <input type="number" step=".01" name="billet[si]" id="silicon" class="form-control" value="<%= billet.si %>" required>
+
+                <label for="chrome" class="form-label">Chrome %</label>
+                <input type="number" step=".001" name="billet[cr]" id="chrome" class="form-control" value="<%= billet.cr %>">
+
+                <label for="moly" class="form-label">Moly %</label>
+                <input type="number" step=".0001" name="billet[mo]" id="moly" class="form-control" value="<%= billet.mo %>">
+
+                <label for="nickel" class="form-label">Nickel %</label>
+                <input type="number" step=".0001" name="billet[ni]" id="nickel" class="form-control" value="<%= billet.ni %>">
+
+                <label for="aluminium" class="form-label">Aluminium %</label>
+                <input type="number" min=".0001" step=".0001" name="billet[al]" id="aluminium" class="form-control" value="<%= billet.al %>">
+
+                <label for="copper" class="form-label">Copper %</label>
+                <input type="number" step=".001" name="billet[cu]" id="copper" class="form-control" value="<%= billet.cu %>">
+
+                <label for="vanadium" class="form-label">Vanadium %</label>
+                <input type="number" min=".0001" step=".0001" name="billet[v]" id="vanadium" class="form-control" value="<%= billet.v %>">
+
+                <label for="ce" class="form-label">Ce %</label>
+                <input type="number" step=".001" name="billet[ce]" id="ce" class="form-control" value="<%= billet.ce %>">
+
+                <label for="totalPcs" class="form-label">Total Pcs</label>
+                <input type="number" name="billet[fullLengthQty]" id="totalPcs" class="form-control" value="<">
+
+                <label for="totalShortLengthPcs" class="form-label">No. of Total Short Length Pcs</label>
+                <input type="number" name="billet[shortLengthQty]" id="totalShortLengthPcs" class="form-control" value="">
+                <!-- <button id="addInputButton" class="btn btn-info m-2">Add Input Field</button> -->
+
+                <div id="inputContainer">
+                    <label for="lengthOfShortPcs" class="form-label">Enter Length of Short Pcs  <span class="btn btn-info btn-lg m-1 fa-solid fa-plus fa-lg" id="addInputButton"></span></label>
+                    <input type="number" step=".01" name="billet[shortPisLength]" id="lengthOfShortPcs" class="form-control">
+                </div>
+
+                <button class="btn btn-success my-2" type="submit">Save Heat</button>
+
+
+            </form>
+        </div>
+    </div>
+    <script defer>
+        // Wait for the document to fully load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the first input field by its ID
+            var firstInputField = document.getElementById('heatNumber');
+            console.log(firstInputField);
+            // Focus on the first input field
+            if (firstInputField) {
+                firstInputField.focus();
+            }
+        });
+    </script>
+    <script>
+        // Get references to the button and input container
+        const addButton = document.getElementById("addInputButton");
+        const inputContainer = document.getElementById("inputContainer");
+
+        // Counter to track the number of input fields added
+        let inputCount = 0;
+
+        // Function to create and add an input field
+        function addInputField() {
+            inputCount++;
+
+            // Create the input field element
+            const inputField = document.createElement("input");
+            inputField.type = "number";
+            inputField.step = ".01"
+            inputField.name = "billet[shortPisLength]";
+            inputField.classList = "form-control m-2"
+            inputField.id = "lengthOfShortPcs"
+
+            // Append the input field to the container
+            inputContainer.appendChild(inputField);
+        }
+
+        // Add a click event listener to the button
+        addButton.addEventListener("click", addInputField);
+    </script>

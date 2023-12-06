@@ -1,0 +1,242 @@
+<% layout('layout/boilerplate') %>
+
+    hiiiii
+    <form action="/billets/<%= tc._id %>/editTc?_method=PUT" method="POST" class="" enctype="application/x-www-form-urlencoded">
+        <div class="row">
+            <h1 class="mb-3">
+                Edit Test Certificate.
+            </h1>
+
+            <div class="col">
+                <label class="form-label" for="billNo">Tax Invoice No.</label>
+                <input type="text" class="form-control" id="billNo" name="tc[billNo]" value="<%= tc.billNo %>" aria-label="Invoice Number" required>
+            </div>
+            <div class="col">
+                <label class="form-label" for="tcNo">TC No.</label>
+                <input type="text" class="form-control" name="tc[tcNo]" id="tcNo" value="<%= tc.tcNo %>" aria-label="TC Number" required>
+            </div>
+            <div class="col" id="tcDateContainer">
+                <label class="form-label" for="tcDate">TC Date</label>
+                <i class="bi bi-calendar-minus" id="tcBtnMinus" onclick="decreaseDate()"></i>
+                <i class="bi bi-calendar-plus" id="tcBtnPlus" onclick="increaseDate()"></i>
+                <input type="date" class="form-control" name="tc[tcDate]" id="tcDate" placeholder="DD/MM/YYY" aria-label="TC Date" required>
+            </div>
+            <div class="col" id="poDateContainer">
+                <label class="form-label" for="poDate">PO Date</label>
+                <i class="bi bi-calendar-minus" id="poBtnMinus" onclick="decreaseDate()"></i>
+                <i class="bi bi-calendar-plus" id="poBtnPlus" onclick="increaseDate()"></i>
+                <input type="date" class="form-control" name="tc[poDate]" id="poDate" placeholder="DD/MM/YYY" aria-label="PO Date" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label class="form-label" for="poNo">PO No.</label>
+                <input type="text" class="form-control" name="tc[poNo]" id="poNo" value="<%= tc.poNo %>" aria-label="PO Number" required>
+            </div>
+            <div class="col">
+                <label class="form-label" for="totalQtyMts">Total Weight Mts.</label>
+                <input type="text" class="form-control" name="tc[totalQtyMts]" id="totalQtyMts" value="<%= tc.totalQtyMts %>" aria-label="Total Quantity Mts" required>
+            </div>
+            <div class="col">
+                <label class="form-label" for="totalPcs">Total Pcs.</label>
+                <input type="text" class="form-control" name="tc[totalPcs]" id="totalPcs" value="<%= tc.totalPcs %>" aria-label="Total Number of Pcs" required>
+            </div>
+            <div class="col">
+                <label class="form-label" for="vehicleNo">Vehicle No.</label>
+                <input type="text" class="form-control" name="tc[vehicleNo]" id="vehicleNo" value="<%= tc.vehicleNo %>" aria-label="Vehicle Number" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label class="form-label" for="buyerName">Buyer</label>
+                <select class="form-select form-select-md" name="tc[buyerName]" id="buyerName" required>
+                    <option selected><%= tc.buyerName %></option>
+                                        <% for(let buyer of party){%>
+            
+                                            <option><%= buyer.partyName %>
+                                            </option>
+                                            <%} %>
+                                        </select>
+
+
+
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label class="form-label" for="heatNos">Enter All Heat Numbers</label>
+
+                    <input type="search" class="form-control" name="billet[heatNo]" id="heatNos" value="<% for (let heat of tc.heatNo){%><%=heat.heatNo %> <%}%> 
+                        " aria-label="Heat Numbers" required>
+
+
+                    <div class="col">
+                        <label class="form-label" for="colorCode">Enter Color Code</label>
+                        <input type="text" class="form-control" name="tc[colorCode]" id="colorCode" placeholder="Enter Color Code" value="<%= tc.colorCode %>" aria-label="Color Code">
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="row" id="">
+
+                <button type="submit" class="btn btn-info mt-2">Save.</button>
+
+            </div>
+        </div>
+        <input type="hidden" id="tcDt" name="tcDate" value="<%= tc.tcDate %>" />
+        <input type="hidden" id="poDt" name="tcDate" value="<%= tc.poDate %>" />
+
+
+    </form>
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get today's date in the format yyyy-mm-dd
+            let tcDate = document.getElementById("tcDt").value;
+            let tcDateVal = new Date(tcDate).toISOString().split("T")[0]
+            let poDate = document.getElementById("poDt").value;
+            let poDateVal = new Date(poDate).toISOString().split("T")[0]
+
+            document.getElementById("tcDate").value = tcDateVal;
+            document.getElementById("poDate").value = poDateVal;
+
+            document.getElementById("tcBtnMinus").addEventListener("click", function() {
+                decreaseDate("tcDate");
+            });
+            document.getElementById("tcBtnPlus").addEventListener("click", function() {
+                increaseDate("tcDate");
+            });
+
+            document.getElementById("poBtnMinus").addEventListener("click", function() {
+                decreaseDate("poDate");
+            });
+            document.getElementById("poBtnPlus").addEventListener("click", function() {
+                increaseDate("poDate");
+            });
+
+            document.getElementById("tcDate").addEventListener("change", updateDateFromInput);
+            document.getElementById("poDate").addEventListener("change", updateDateFromInput);
+            document.addEventListener("keydown", handleKeyPress);
+        });
+
+        function decreaseDate(dateInputId) {
+            updateDate(dateInputId, -1);
+        }
+
+        function increaseDate(dateInputId) {
+            updateDate(dateInputId, 1);
+        }
+
+        function updateDate(dateInputId, deltaDays) {
+            const dateInput = document.getElementById(dateInputId);
+            const currentDate = new Date(dateInput.value);
+            currentDate.setDate(currentDate.getDate() + deltaDays);
+            dateInput.value = currentDate.toISOString().split('T')[0];
+        }
+
+        function updateDateFromInput() {
+            const tcDate = document.getElementById("tcDate");
+            const poDate = document.getElementById("poDate");
+
+            const enteredDate = new Date(tcDate.value);
+            if (!isNaN(enteredDate.getTime())) {
+                // Valid date entered, update the input value
+                tcDate.value = enteredDate.toISOString().split('T')[0];
+            } else {
+                // Invalid date entered, revert to the previous value
+                const currentDate = new Date();
+                tcDate.value = currentDate.toISOString().split('T')[0];
+            }
+
+            const enteredPoDate = new Date(poDate.value);
+            if (!isNaN(enteredPoDate.getTime())) {
+                // Valid date entered, update the input value
+                poDate.value = enteredPoDate.toISOString().split('T')[0];
+            } else {
+                // Invalid date entered, revert to the previous value
+                const currentDate = new Date();
+                poDate.value = currentDate.toISOString().split('T')[0];
+            }
+        }
+
+        function handleKeyPress(event) {
+            const focusedElement = document.activeElement;
+
+            // Check if the key pressed is the up or down arrow
+            if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+                if (focusedElement.id === "tcDate") {
+                    if (event.key === "ArrowUp") {
+                        increaseDate("tcDate");
+                    } else if (event.key === "ArrowDown") {
+                        decreaseDate("tcDate");
+                    }
+                } else if (focusedElement.id === "poDate") {
+                    if (event.key === "ArrowUp") {
+                        increaseDate("poDate");
+                    } else if (event.key === "ArrowDown") {
+                        decreaseDate("poDate");
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script defer>
+        // Wait for the document to fully load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the first input field by its ID
+            var firstInputField = document.getElementById('billNo');
+            console.log(firstInputField);
+            // Focus on the first input field
+            if (firstInputField) {
+                firstInputField.focus();
+            }
+        });
+    </script>
+    <!-- <form action="/billets/newTc" method="get"> -->
+    <!-- <div class="row">
+            <div class="col">
+                <label class="form-label" for "heatNos">Buyer</label>
+                <input type="search" class="form-control" name="tc[heatNo]" id="heatNos" placeholder="Enter All Heat Numbers (E.g. h123 h124 h125)" aria-label="Heat Numbers" required>
+            </div>
+        </div>
+    </form> -->
+
+
+    <!-- <script>
+        const addButton = document.getElementById("addInputButton");
+        const inputContainer = document.getElementById("inputContainer");
+        // const inputCountField = document.getElementById("totalShortLengthPcs");
+        let inputCount = 0
+
+        function addInputFields() {
+            console.log("shgd")
+                // let count = parseInt(inputCountField.value, 10);
+                // let lastValue = count
+                // if (lastValue != count && lengthOfShortPcs) {
+                //     inputContainer.removeChild(lengthOfShortPcs)
+                // }
+                // if (isNaN(count) || count <= 0) {
+                //     alert("Please enter a valid positive number.");
+                //     return;
+                // }
+            inputCount++;
+
+
+            // Clear existing input fields
+            // inputContainer.innerHTML = "";
+
+
+            const inputField = document.createElement("input");
+            inputField.type = "text";
+            inputField.name = "billet[shortPisLength]";
+            inputField.classList = "form-control m-2"
+            inputField.id = "lengthOfShortPcs"
+            inputContainer.appendChild(inputField);
+
+        }
+
+        addButton.addEventListener("click", addInputFields);
+    </script> -->

@@ -1,0 +1,19 @@
+<% layout('layout/boilerplate') %>
+
+    <div class="row">
+        <h1 class="text-center">Edit Party</h1>
+        <div class="col-6 offset-3">
+            <form action="/partymaster/<%= party._id %>?_method=PUT" method="POST" novalidate class="validated-form" enctype="application/x-www-form-urlencoded">
+                <div class="mb-2">
+                    <label for="partyName" class="form-label font-weight-bold">Party Name</label>
+                    <input type="text" id="partyName" name="party[partyName]" class="form-control" value="<%= party.partyName %>" required>
+                </div>
+
+                <button class="btn btn-success my-2" onclick="return confirm('Are you sure you want to edit this item?')">Save Item</button>
+                <!--  -->
+
+
+            </form>
+
+        </div>
+    </div>

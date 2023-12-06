@@ -1,0 +1,21 @@
+<% layout('layout/boilerplate') %>
+
+
+
+    <% layout('layout/boilerplate') %>
+        <div class="row">
+            <h1 class="text-center">Add New Party To The Party Master</h1>
+            <div class="col-6 offset-3">
+
+                <form action="/partymaster" novalidate method="POST" enctype="multipart/form-data">
+                    <label class="form-label mt-1" for="partyName">Enter Party Name</label>
+                    <input class="form-control" type="text" id="partyName" name="party[partyName]">
+
+
+
+
+                    <button type="submit" class="btn btn-primary mt-3">Add Party</button>
+                </form>
+            </div>
+        </div>
+        <div class="container">

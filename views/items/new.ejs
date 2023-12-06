@@ -1,0 +1,84 @@
+<% layout('layout/boilerplate') %>
+    <div class="row">
+        <h1 class="text-center">Add New Item To The Inventory</h1>
+        <div class="col-6 offset-3">
+
+            <form action="/items" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+                <label class="form-label" for="name">Item Name</label>
+                <input class="form-control" type="text" id="name" name="item[itemName]" required>
+
+                <label class="form-label" for="description">Item Description</label>
+                <input class="form-control" type="text" id="description" name="item[itemDescription]" required>
+
+                <!-- <label class="form-label" for="unit">Item Quantity Unit</label>
+                <input class="form-control" type="text" id="unit" name="item[itemUnit]" required> -->
+                <label for="unit" class="form-label">Item Quantity Unit</label>
+                <select class="form-select form-select-md" name="item[itemUnit]" id="unit" required>
+                        <option selected>Select Item Quantity Unit</option>
+                        <option value="NOS">NOS</option>
+                        <option value="PCS">PCS</option>
+                        <option value="BOX">BOX</option>
+                        <option value="KGS">KGS</option>
+                        <option value="MTS">MTS</option>
+                        <option value="BAGS">BAGS</option>
+                        </select>
+                <label class="form-label" for="qty">Item Quantity</label>
+                <input class="form-control" type="number" id="qty" name="item[itemQty]" required>
+                <!-- <label class="form-label" for="category">Item Category</label>
+                <input class="form-control" type="text" id="category" name="item[itemCategoryName]" required> -->
+                <div class="row">
+                    <div class="col">
+
+                        <label for="category" class="form-label-sm">Item Category</label>
+                        <select class="form-select" name="item[itemCategoryName]" id="category" required>
+                                <option selected>Select Item Category</option>
+                                <% for(let item of itemCategories){%>
+            
+                                <option value="Item Category"><%= item.itemCategoryName %>
+                                </option>
+                                <%} %>
+                            </select>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-sm btn-primary mt-2 mb-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Add New Category
+  </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content ">
+                                    <div class="modal-header ">
+                                        <h5 class="modal-title " id="exampleModalLongTitle ">Add New Category</h5>
+
+
+                                    </div>
+                                    <div class="modal-body">
+                                        <div>
+                                            <form action="/items/category" novalidate method="POST" enctype="multipart/form-data">
+                                            </form>
+                                            <h1></h1>
+                                            <form action="/items/category" novalidate method="POST" enctype="multipart/form-data">
+                                                <label class="form-label" for="newItemCategory">New Item Category</label>
+                                                <input class="form-control" type="text" id="newItemCategory" name="category[itemCategoryName]">
+                                                <button type="submit" class="mt-2 btn btn-success">Add Category</button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- <div class="col mt-4 ">
+                        <input type="text " name=" " id=" " class="form-control "> </div>
+                </div> -->
+
+                    <label class="form-label" for="image">Item Image</label>
+                    <input class="form-control img-fluid" type="file" id="image" name="item[itemImage]" required>
+                    <button class="btn btn-success my-2">Save Item</button>
+            </form>
+            </div>
+        </div>
+    </div>
+    <div class="container ">
